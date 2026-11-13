@@ -11,7 +11,10 @@ case "${1:-}" in
 esac
 netbird down
 tailscale down
+# Let the daemons finish tearing down their DNS config before resetting the resolver.
+sleep 2
 systemctl restart systemd-resolved
+resolvectl flush-caches
 case "$1" in
   tailscale) tailscale up ;;
   netbird)   netbird up ;;
