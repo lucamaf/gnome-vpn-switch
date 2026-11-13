@@ -1,0 +1,18 @@
+#!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright (C) 2026 lucamaf
+# Root helper for the VPN Switch GNOME extension (same steps as the original scripts).
+# Usage: vpn-switch-helper tailscale|netbird|off
+set -u
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+case "${1:-}" in
+  tailscale|netbird|off) ;;
+  *) echo "usage: $0 tailscale|netbird|off" >&2; exit 2 ;;
+esac
+netbird down
+tailscale down
+systemctl restart systemd-resolved
+case "$1" in
+  tailscale) tailscale up ;;
+  netbird)   netbird up ;;
+esac

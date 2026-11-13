@@ -1,0 +1,8 @@
+*.zip
+*.shell-extension.zip
+*~
+*.swp
+.vscode/
+.idea/
+CLAUDE.md
+.claude/
