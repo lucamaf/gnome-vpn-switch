@@ -47,6 +47,17 @@ async function netbirdUp() {
 
 let helperPath = null;
 
+// NetBird prints these when its SSO session has expired and it needs a new login.
+const NETBIRD_LOGIN_RE =
+    /login has expired|log in once more|retrying login|request device code|NeedsLogin|SessionExpired/i;
+
+function failureMessage(target, output) {
+    if (target === 'netbird' && NETBIRD_LOGIN_RE.test(output))
+        return 'NetBird login expired. Open the NetBird app (or run "sudo netbird up" in a terminal) and sign in again, then switch.';
+    const text = output.trim();
+    return text.length > 300 ? `${text.slice(0, 300)}…` : text || 'Switch failed.';
+}
+
 // Runs the whole down / restart-resolved / up sequence as root via the helper
 // shipped inside the extension (both VPN CLIs and systemd-resolved need root).
 function switchTo(target) {
@@ -91,7 +102,7 @@ class VpnToggle extends QuickMenuToggle {
         this.subtitle = 'Switching…';
         const r = await switchTo(id);
         this._busy = false;
-        if (!r.ok) Main.notifyError('VPN Switch', r.out.trim().slice(0, 300));
+        if (!r.ok) Main.notifyError('VPN Switch', failureMessage(id, r.out));
         this.emit('refresh-requested');
     }
 });
