@@ -2,7 +2,7 @@
   "uuid": "vpn-switch@lucamaf",
   "name": "VPN Switch",
   "description": "Quick settings toggle to switch between Tailscale and NetBird, which cannot run at the same time. Requires the tailscale and netbird CLIs; switching asks for authentication via pkexec.",
-  "shell-version": ["50"],
+  "shell-version": ["50", "51"],
   "version": 1,
   "license": "GPL-2.0-or-later",
   "url": "https://github.com/lucamaf/gnome-vpn-switch"
